@@ -4,8 +4,8 @@ module sync_fifo #(
 )(
     input  wire                    clk,       // Main system clock
     input  wire                    rst_n,     // Active-low reset (clears everything)
-    input  wire                    write_en,  // CPU says "I want to write"
-    input  wire                    read_en,   // SPI engine says "I want to read"
+    input  wire                    write_en,  // CPU says "I want to write"   ||| write enable line 
+    input  wire                    read_en,   // SPI engine says "I want to read"  |||  read enable line
     input  wire [DATA_WIDTH-1:0]   data_in,   // 16-bit data coming from CPU
     output reg  [DATA_WIDTH-1:0]   data_out,  // 16-bit data going to SPI engine
     output wire                    empty,     // Flag telling SPI "stop reading"
