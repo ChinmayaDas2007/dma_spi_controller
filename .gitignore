@@ -1,0 +1,4 @@
+*.vcd
+sim_output
+.DS_Store
+.vscode/
