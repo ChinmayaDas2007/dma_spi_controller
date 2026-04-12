@@ -1,5 +1,5 @@
 module sync_fifo #(
-    parameter DATA_WIDTH = 16,
+    parameter DATA_WIDTH = 32,
     parameter DEPTH = 16
 )(
     input  wire                    clk,

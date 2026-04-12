@@ -8,7 +8,7 @@ module spi_top_tb;
     
     // CPU Interface
     reg        wr_en;
-    reg [15:0] wr_data;
+    reg [31:0] wr_data;     // UPGRADED to 32-bit
     wire       tx_full;
     
     // SPI Physical Pins
@@ -79,15 +79,15 @@ module spi_top_tb;
         // Word 1
         @(posedge clk);
         wr_en = 1;
-        wr_data = 16'hAAAA; // 1010_1010_1010_1010
+        wr_data = 32'hAAAA_BBBB; // UPGRADED to 32-bit
         
         // Word 2
         @(posedge clk);
-        wr_data = 16'h5555; // 0101_0101_0101_0101
+        wr_data = 32'h5555_1111; // UPGRADED to 32-bit
         
         // Word 3
         @(posedge clk);
-        wr_data = 16'h1234; // 0001_0010_0011_0100
+        wr_data = 32'h1234_5678; // UPGRADED to 32-bit
         
         // CPU is done. Stop writing.
         @(posedge clk);
@@ -95,8 +95,8 @@ module spi_top_tb;
         $display("--- CPU FINISHED. WAITING FOR DMA ---");
 
         // --- WAIT FOR HARDWARE TO FINISH ---
-        // We wait enough time for 3 full 16-bit SPI transfers at divided clock speed.
-        #4000; 
+        // We wait enough time for 3 full 32-bit SPI transfers at divided clock speed.
+        #8000; // UPGRADED wait time
         
         $display("--- SIMULATION COMPLETE ---");
         $finish;

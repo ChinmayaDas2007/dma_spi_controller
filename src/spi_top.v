@@ -4,7 +4,7 @@ module spi_top (
     
     // CPU Interface (To TX FIFO)
     input  wire        wr_en,
-    input  wire [15:0] wr_data,
+    input  wire [31:0] wr_data,     // UPGRADED to 32-bit
     output wire        tx_full,
     
     // SPI Physical Pins
@@ -19,11 +19,11 @@ module spi_top (
     input  wire [2:0]  slave_sel,   // Which slave to talk to
     input  wire        cpol,
     input  wire        cpha,
-    input  wire [15:0] clk_div
+    input  wire [15:0] clk_div      // Clock divider stays 16-bit
 );
 
     // --- INTERNAL WIRES (The 'Solder' between chips) ---
-    wire [15:0] fifo_to_dma_data;
+    wire [31:0] fifo_to_dma_data;   // UPGRADED to 32-bit
     wire        fifo_empty;
     wire        dma_to_fifo_rd_en;
     
@@ -34,7 +34,7 @@ module spi_top (
     wire        combined_miso;
 
     // 1. Instantiation: TX FIFO (The Warehouse)
-    sync_fifo #( .DATA_WIDTH(16), .DEPTH(16) ) tx_buffer (
+    sync_fifo #( .DATA_WIDTH(32), .DEPTH(16) ) tx_buffer ( // UPGRADED to 32-bit
         .clk(clk),
         .rst_n(rst_n),
         .write_en(wr_en),
@@ -58,7 +58,6 @@ module spi_top (
     );
 
     // 3. Instantiation: MISO Multiplexer (The Traffic Cop)
-    // Ensures only the selected slave drives the master input [cite: 134, 162]
     miso_priority_mux mux_unit (
         .slave_select(slave_sel),
         .miso_s1(miso_s1),
@@ -85,7 +84,6 @@ module spi_top (
     );
 
     // 5. Slave Select Decoder
-    // Converts 3'b001 into a physical active-low pin [cite: 79, 161]
     assign ss_n = ~slave_sel; 
 
 endmodule
